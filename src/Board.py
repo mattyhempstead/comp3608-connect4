@@ -6,9 +6,10 @@ class Board:
         self.red_count = 0
         self.yellow_count = 0
 
-        self.count_2_row = 0
-        self.count_3_row = 0
-        self.count_4_row = 0
+
+        # Number in a row for each colour
+        self.red_in_a_row = [0]*6
+        self.yellow_in_a_row = [0]*6
 
 
         self.grid = [[[0]*9 for i in range(7)] for j in range(6)]
@@ -37,6 +38,8 @@ class Board:
         s += '='*23
 
         s += f'\nR: {self.red_count}  -  Y: {self.yellow_count}' 
+        s += f"\nR: {self.red_in_a_row}"
+        s += f"\nY: {self.yellow_in_a_row}"
 
         return s
 
@@ -156,9 +159,97 @@ class Board:
 
 
         ## Count n-in-a-rows
-        # 
+
+        # n-in-a-row from Left to Right
+        LLRR = LL + RR - 1
+        if LLRR > 1:
+            if piece == 1:
+                if LL > 2:
+                    self.red_in_a_row[LL-1 -2] -= 1
+                    print("Red lost", LL-1)
+                if RR > 2:
+                    self.red_in_a_row[RR-1 -2] -= 1
+                    print("Red lost", RR-1)
+                self.red_in_a_row[LLRR -2] += 1
+                print("Red gained", LLRR)
+            else:
+                if LL > 2:
+                    self.yellow_in_a_row[LL-1 -2] -= 1
+                    print("Yellow lost", LL-1)
+                if RR > 2:
+                    self.yellow_in_a_row[RR-1 -2] -= 1       
+                    print("Yellow lost", RR-1)
+                self.yellow_in_a_row[LLRR -2] += 1
+                print("Yellow gained", LLRR)
 
 
+        # n-in-a-row from Bottom to Top
+        BBTT = BB + TT - 1
+        if BBTT > 1:
+            if piece == 1:
+                if BB > 2:
+                    self.red_in_a_row[BB-1 -2] -= 1
+                    print("Red lost", BB-1)
+                if TT > 2:
+                    self.red_in_a_row[TT-1 -2] -= 1
+                    print("Red lost", TT-1)
+                self.red_in_a_row[BBTT -2] += 1
+                print("Red gained", BBTT)
+            else:
+                if BB > 2:
+                    self.yellow_in_a_row[BB-1 -2] -= 1
+                    print("Yellow lost", BB-1)
+                if TT > 2:
+                    self.yellow_in_a_row[TT-1 -2] -= 1       
+                    print("Yellow lost", TT-1)
+                self.yellow_in_a_row[BBTT-2] += 1
+                print("Yellow gained", BBTT)
+
+
+        # n-in-a-row from BottomLeft to TopRight
+        BLTR = BL + TR - 1
+        if BLTR > 1:
+            if piece == 1:
+                if BL > 2:
+                    self.red_in_a_row[BL-1 -2] -= 1
+                    print("Red lost", BL-1)
+                if TR > 2:
+                    self.red_in_a_row[TR-1 -2] -= 1
+                    print("Red lost", TR-1)
+                self.red_in_a_row[BLTR -2] += 1
+                print("Red gained", BLTR)
+            else:
+                if BL > 2:
+                    self.yellow_in_a_row[BL-1 -2] -= 1
+                    print("Yellow lost", BL-1)
+                if TR > 2:
+                    self.yellow_in_a_row[TR-1 -2] -= 1       
+                    print("Yellow lost", TR-1)
+                self.yellow_in_a_row[BLTR -2] += 1
+                print("Yellow gained", BLTR)
+
+
+        # n-in-a-row from TopLeft to BottomRight
+        TLBR = TL + BR - 1
+        if TLBR > 1:
+            if piece == 1:
+                if TL > 2:
+                    self.red_in_a_row[TL-1 -2] -= 1
+                    print("Red lost", TL-1)
+                if BR > 2:
+                    self.red_in_a_row[BR-1 -2] -= 1
+                    print("Red lost", BR-1)
+                self.red_in_a_row[TLBR -2] += 1
+                print("Red gained", TLBR)
+            else:
+                if TL > 2:
+                    self.yellow_in_a_row[TL-1 -2] -= 1
+                    print("Yellow lost", TL-1)
+                if BR > 2:
+                    self.yellow_in_a_row[BR-1 -2] -= 1       
+                    print("Yellow lost", BR-1)
+                self.yellow_in_a_row[TLBR -2] += 1
+                print("Yellow gained", TLBR)
 
 
 
