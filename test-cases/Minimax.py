@@ -27,7 +27,6 @@ class Minimax:
         a = None
 
         for c in range(7):
-        #for c in range(7:
             r = board.column_count[c]
             if r == 6: continue
             
@@ -56,7 +55,7 @@ class Minimax:
             return (-1, board.eval())
 
         v = math.inf
-        
+
         for c in range(7):
             r = board.column_count[c]
             if r == 6: continue
