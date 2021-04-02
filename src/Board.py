@@ -1,3 +1,4 @@
+#import numpy as np
 
 class Board:
     def __init__(self, state):
@@ -17,6 +18,7 @@ class Board:
 
 
         self.grid = [[[0]*9 for i in range(7)] for j in range(6)]
+        #self.grid = np.array(self.grid)
 
         pre_grid = [list(row) for row in state.split(",")]
         for r in range(6):
@@ -30,7 +32,7 @@ class Board:
         # Array structure goes
         # Piece LL RR TT BB BL TR TL BR
 
-        print("INIT FINISHED")
+        #print("INIT FINISHED")
 
 
     def __str__(self):
@@ -45,6 +47,8 @@ class Board:
         s += f'\nR: {self.red_count} {self.red_in_a_row}'
         s += f'\nY: {self.yellow_count} {self.yellow_in_a_row}'
         s += f'\n{self.column_count}'
+        s += f'\n{self.eval()}'
+        s += '\n'
 
         return s
 
@@ -356,5 +360,12 @@ class Board:
 
         return total
 
+
+    def is_winner(self):
+        if sum(self.red_in_a_row[2:]) > 0:
+            return True
+        if sum(self.yellow_in_a_row[2:]) > 0:
+            return True
+        return False
 
 

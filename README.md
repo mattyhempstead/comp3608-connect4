@@ -84,6 +84,10 @@ Need to be able to read/write from this SUPER quick.
 
 
 
+## Alpha Beta
+I think we always want to first scan the nodes that are best for the current player.
+Probably start from the middle then.
+
 
 
 
