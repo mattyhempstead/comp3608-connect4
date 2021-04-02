@@ -17,10 +17,14 @@ print(depth)
 
 board = Board(state)
 print(board)
-print(board.grid)
+#print(board.grid)
 
 
 minimax = Minimax()
 move = minimax.move(board, player, depth)
 print(move)
+
+print("Nodes checked", minimax.nodes_checked)
+
+
 

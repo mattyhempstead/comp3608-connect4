@@ -11,6 +11,10 @@ class Board:
         self.red_in_a_row = [0]*6
         self.yellow_in_a_row = [0]*6
 
+        
+        # Pieces in each column
+        self.column_count = [0]*7
+
 
         self.grid = [[[0]*9 for i in range(7)] for j in range(6)]
 
@@ -26,6 +30,7 @@ class Board:
         # Array structure goes
         # Piece LL RR TT BB BL TR TL BR
 
+        print("INIT FINISHED")
 
 
     def __str__(self):
@@ -35,30 +40,17 @@ class Board:
                 s += f" {col[0]: }"
                 s += "["+"".join(map(str,col[1:]))+"]"
             s += "\n"
-        s += '='*23
+        #s += '='*23
 
-        s += f'\nR: {self.red_count}  -  Y: {self.yellow_count}' 
-        s += f"\nR: {self.red_in_a_row}"
-        s += f"\nY: {self.yellow_in_a_row}"
+        s += f'\nR: {self.red_count} {self.red_in_a_row}'
+        s += f'\nY: {self.yellow_count} {self.yellow_in_a_row}'
+        s += f'\n{self.column_count}'
 
         return s
 
 
-    def eval(self):
-        total = 0
-    
-        total += self.red_count
-        
-
-
-        total -= self.yellow_count
-
-        return total
-
-
-
     def place(self, piece, r, c):
-        print(f"Placing: {piece: } ({r},{c})")
+        #print(f"Placing: {piece: } ({r},{c})")
         
         cell = self.grid[r][c]
         cell[0] = piece
@@ -67,6 +59,8 @@ class Board:
             self.red_count += 1
         else:
             self.yellow_count += 1
+
+        self.column_count[c] += 1
 
         
         # Only need to check at most 3 in each direction
@@ -134,18 +128,18 @@ class Board:
 
         # Scan TopRight and update BL
         for i in range(TR):
-            self.grid[r+i][c-i][5] = BL+i
+            self.grid[r+i][c+i][5] = BL+i
 
 
 
         # TopLeft line length
         TL = 1
-        if r > 0 and c > 0 and self.grid[r+1][c-1][0] == piece: 
+        if r < 5 and c > 0 and self.grid[r+1][c-1][0] == piece: 
             TL += self.grid[r+1][c-1][7]
 
         # BottomRight line length
         BR = 1
-        if r < 5 and c < 6 and self.grid[r-1][c+1][0] == piece: 
+        if r > 0 and c < 6 and self.grid[r-1][c+1][0] == piece: 
             BR += self.grid[r-1][c+1][8]
 
         # Scan TopLeft and update BR
@@ -166,21 +160,21 @@ class Board:
             if piece == 1:
                 if LL > 2:
                     self.red_in_a_row[LL-1 -2] -= 1
-                    print("Red lost", LL-1)
+                    #print("Red lost", LL-1)
                 if RR > 2:
                     self.red_in_a_row[RR-1 -2] -= 1
-                    print("Red lost", RR-1)
+                    #print("Red lost", RR-1)
                 self.red_in_a_row[LLRR -2] += 1
-                print("Red gained", LLRR)
+                #print("Red gained", LLRR)
             else:
                 if LL > 2:
                     self.yellow_in_a_row[LL-1 -2] -= 1
-                    print("Yellow lost", LL-1)
+                    #print("Yellow lost", LL-1)
                 if RR > 2:
                     self.yellow_in_a_row[RR-1 -2] -= 1       
-                    print("Yellow lost", RR-1)
+                    #print("Yellow lost", RR-1)
                 self.yellow_in_a_row[LLRR -2] += 1
-                print("Yellow gained", LLRR)
+                #print("Yellow gained", LLRR)
 
 
         # n-in-a-row from Bottom to Top
@@ -189,21 +183,21 @@ class Board:
             if piece == 1:
                 if BB > 2:
                     self.red_in_a_row[BB-1 -2] -= 1
-                    print("Red lost", BB-1)
+                    #print("Red lost", BB-1)
                 if TT > 2:
                     self.red_in_a_row[TT-1 -2] -= 1
-                    print("Red lost", TT-1)
+                    #print("Red lost", TT-1)
                 self.red_in_a_row[BBTT -2] += 1
-                print("Red gained", BBTT)
+                #print("Red gained", BBTT)
             else:
                 if BB > 2:
                     self.yellow_in_a_row[BB-1 -2] -= 1
-                    print("Yellow lost", BB-1)
+                    #print("Yellow lost", BB-1)
                 if TT > 2:
                     self.yellow_in_a_row[TT-1 -2] -= 1       
-                    print("Yellow lost", TT-1)
+                    #print("Yellow lost", TT-1)
                 self.yellow_in_a_row[BBTT-2] += 1
-                print("Yellow gained", BBTT)
+                #print("Yellow gained", BBTT)
 
 
         # n-in-a-row from BottomLeft to TopRight
@@ -212,21 +206,21 @@ class Board:
             if piece == 1:
                 if BL > 2:
                     self.red_in_a_row[BL-1 -2] -= 1
-                    print("Red lost", BL-1)
+                    #print("Red lost", BL-1)
                 if TR > 2:
                     self.red_in_a_row[TR-1 -2] -= 1
-                    print("Red lost", TR-1)
+                    #print("Red lost", TR-1)
                 self.red_in_a_row[BLTR -2] += 1
-                print("Red gained", BLTR)
+                #print("Red gained", BLTR)
             else:
                 if BL > 2:
                     self.yellow_in_a_row[BL-1 -2] -= 1
-                    print("Yellow lost", BL-1)
+                    #print("Yellow lost", BL-1)
                 if TR > 2:
                     self.yellow_in_a_row[TR-1 -2] -= 1       
-                    print("Yellow lost", TR-1)
+                    #print("Yellow lost", TR-1)
                 self.yellow_in_a_row[BLTR -2] += 1
-                print("Yellow gained", BLTR)
+                #print("Yellow gained", BLTR)
 
 
         # n-in-a-row from TopLeft to BottomRight
@@ -235,22 +229,132 @@ class Board:
             if piece == 1:
                 if TL > 2:
                     self.red_in_a_row[TL-1 -2] -= 1
-                    print("Red lost", TL-1)
+                    #print("Red lost", TL-1)
                 if BR > 2:
                     self.red_in_a_row[BR-1 -2] -= 1
-                    print("Red lost", BR-1)
+                    #print("Red lost", BR-1)
                 self.red_in_a_row[TLBR -2] += 1
-                print("Red gained", TLBR)
+                #print("Red gained", TLBR)
             else:
                 if TL > 2:
                     self.yellow_in_a_row[TL-1 -2] -= 1
-                    print("Yellow lost", TL-1)
+                    #print("Yellow lost", TL-1)
                 if BR > 2:
                     self.yellow_in_a_row[BR-1 -2] -= 1       
-                    print("Yellow lost", BR-1)
+                    #print("Yellow lost", BR-1)
                 self.yellow_in_a_row[TLBR -2] += 1
-                print("Yellow gained", TLBR)
+                #print("Yellow gained", TLBR)
 
+
+
+    def remove(self, r, c):
+        #print(f"Removing: ({r},{c})")
+
+        cell = self.grid[r][c]
+        piece = cell[0]
+        cell[0] = 0
+
+        if piece == 1:
+            self.red_count -= 1
+        else:
+            self.yellow_count -= 1
+
+        self.column_count[c] -= 1
+
+
+        LL = cell[1]
+        RR = cell[2]
+        BB = cell[3]
+        TT = cell[4]
+        BL = cell[5]
+        TR = cell[6]
+        TL = cell[7]
+        BR = cell[8]
+
+        # Remove lines
+        if piece == 1:
+            in_a_row = self.red_in_a_row
+        else:
+            in_a_row = self.yellow_in_a_row
+
+        if LL+RR-1 > 1:
+            in_a_row[LL+RR-1 -2] -= 1
+        if BB+TT-1 > 1:
+            in_a_row[BB+TT-1 -2] -= 1
+        if BL+TR-1 > 1:
+            in_a_row[BL+TR-1 -2] -= 1
+        if TL+BR-1 > 1:
+            in_a_row[TL+BR-1 -2] -= 1
+
+        # Add new line
+        if LL > 2:
+            in_a_row[LL-1 -2] += 1
+        if RR > 2:
+            in_a_row[RR-1 -2] += 1
+        if BB > 2:
+            in_a_row[BB-1 -2] += 1
+        if TT > 2:
+            in_a_row[TT-1 -2] += 1
+        if BL > 2:
+            in_a_row[BL-1 -2] += 1
+        if TR > 2:
+            in_a_row[TR-1 -2] += 1
+        if TL > 2:
+            in_a_row[TL-1 -2] += 1
+        if BR > 2:
+            in_a_row[BR-1 -2] += 1
+
+
+        # Scan Left and update Right
+        for i in range(LL):
+            self.grid[r][c-i][2] -= RR
+
+        # Scan Right and update Left
+        for i in range(RR):
+            self.grid[r][c+i][1] -= LL
+
+        # Scan Bottom and update Top
+        for i in range(BB):
+            self.grid[r-i][c][4] -= TT
+
+        # Scan Top and update Bottom
+        for i in range(TT):
+            self.grid[r+i][c][3] -= BB
+
+        # Scan BottomLeft and update TopRight
+        for i in range(BL):
+            self.grid[r-i][c-i][6] -= TR
+
+        # Scan TopRight and update BottomLeft
+        for i in range(TR):
+            self.grid[r+i][c+i][5] -= BL
+
+        # Scan TopLeft and update BottomRight
+        for i in range(TL):
+            self.grid[r+i][c-i][8] -= BR
+
+        # Scan BottomRight and update TopLeft
+        for i in range(BR):
+            self.grid[r-i][c+i][7] -= TL
+
+
+
+    def eval(self):
+        total = 0
+    
+        total += self.red_count
+        total += 10 * self.red_in_a_row[0]
+        total += 100 * self.red_in_a_row[1]
+        total += 1000 * self.red_in_a_row[2]
+
+
+        total -= self.yellow_count
+        total -= 10 * self.yellow_in_a_row[0]
+        total -= 100 * self.yellow_in_a_row[1]
+        total -= 1000 * self.yellow_in_a_row[2]
+
+
+        return total
 
 
 

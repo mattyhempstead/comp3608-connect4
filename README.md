@@ -44,9 +44,16 @@ tracked. Should see how fast that turns out. Probably not tbh.
 
 
 
-
 Could technically do a neural network and then train it to look further ahead?
 This would make evaling the leaf nodes quite slow.
+
+
+
+Tournament version should really only care about open n-in-a-rows (unless its a
+4-in-a-row, which gets max weight). Any 2 or 3 lines that are fully blocked up
+should not be worth anything.
+Could maybe weight the columns or direction of line differently.
+
 
 
 
@@ -74,6 +81,9 @@ Would it instead be quicker to just calculate them at the leaf nodes?
 
 Read some stuff about putting matrix in cache?
 Need to be able to read/write from this SUPER quick.
+
+
+
 
 
 
