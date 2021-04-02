@@ -1,4 +1,4 @@
-import sys, time
+import sys, time, math
 from Board import Board
 from Minimax import Minimax
 
@@ -23,14 +23,21 @@ board = Board(state)
 
 
 minimax = Minimax(ab)
-move = minimax.move(board, player, depth)
+
+#move = minimax.move(board, player, depth, -math.inf, math.inf)
+
+if player == 1:
+    move = minimax.move_max(board, depth, -math.inf, math.inf)
+else:
+    move = minimax.move_min(board, depth, -math.inf, math.inf)
+
 #print(move)
 print(move[0])
 
 #print("Nodes checked", minimax.nodes_checked)
 print(minimax.nodes_checked)
 
-#print(f"Time: {1000*(time.time() - start_time):.8f}ms")
+print(f"Time: {1000*(time.time() - start_time):.8f}ms")
 
 
 

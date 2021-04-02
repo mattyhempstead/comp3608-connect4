@@ -17,7 +17,70 @@ class Minimax:
         self.nodes_checked = 0
 
 
-    def move(self, board, turn, depth, alpha=-math.inf, beta=math.inf):
+    def move_max(self, board, depth, alpha, beta):
+        self.nodes_checked += 1
+
+        if depth == 0:
+            return (-1, board.eval())
+
+        v = -math.inf
+        a = None
+
+        for c in range(7):
+        #for c in range(7:
+            r = board.column_count[c]
+            if r == 6: continue
+            
+            board.place(1, r, c)
+            score = self.move_min(board, depth-1, alpha, beta)[1]
+            #winner = board.is_winner()
+            #if winner:
+            #    score = turn * 10000
+            board.remove(r, c)
+
+            if score > v:
+                v = score
+                a = c
+
+            if self.ab and v >= beta:
+                return (c, v)
+            alpha = max(alpha, v)
+        
+        return (a,v)
+
+
+    def move_min(self, board, depth, alpha, beta):
+        self.nodes_checked += 1
+
+        if depth == 0:
+            return (-1, board.eval())
+
+        v = math.inf
+        
+        for c in range(7):
+            r = board.column_count[c]
+            if r == 6: continue
+            
+            board.place(-1, r, c)
+            score = self.move_max(board, depth-1, alpha, beta)[1]
+            #winner = board.is_winner()
+            #if winner:
+            #    score = turn * 10000
+            board.remove(r, c)
+
+            if score < v:
+                v = score
+                a = c
+
+            if self.ab and v <= alpha:
+                return (c, v)
+            beta = min(beta, v)
+        
+        return (a,v)
+
+
+
+    def move(self, board, turn, depth, alpha, beta):
         #print("Move", turn, depth)
 
         self.nodes_checked += 1
@@ -41,9 +104,9 @@ class Minimax:
                 score = self.move(board, turn*-1, depth-1, alpha, beta)[1]
                 #print(c, score)
 
-                winner = board.is_winner()
-                if winner:
-                    score = turn * 10000
+                #winner = board.is_winner()
+                #if winner:
+                #    score = turn * 10000
 
                 # Undo move in column c
                 board.remove(r, c)

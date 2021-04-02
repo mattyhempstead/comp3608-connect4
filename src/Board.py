@@ -345,6 +345,11 @@ class Board:
 
     def eval(self):
         total = 0
+
+        if any(self.red_in_a_row[2:]):
+            return 10000
+        if any(self.yellow_in_a_row[2:]):
+            return -10000
     
         total += self.red_count
         total += 10 * self.red_in_a_row[0]
