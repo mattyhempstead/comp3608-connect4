@@ -233,6 +233,10 @@ This prevents another function call and might be a bit quicker?
 
 
 
+If we reach a winning node for current player, return instantly and stop
+searching? I think ab isn't fully efficient here.
+
+
 
 ## lru_cache
 Wow so good.
@@ -240,6 +244,25 @@ The IDS will now be so much faster since its all the same program?
 Make sure its the same board!
 
 The same function across different instances might break?
+
+
+
+
+## Evaluation Function
+Gotta be quick and good.
+
+Try giving each position on the board a worth.
+Pieces closer to the centre are generally worth more (can be learned).
+To evaluate the pieces we sum up our own and subtract the opponents.
+Maybe start by having the value be the total numebr of lines a piece provides?
+
+
+
+## Simulation
+Plot winning % vs search time (with error)?
+
+
+## Search Order
 
 
 

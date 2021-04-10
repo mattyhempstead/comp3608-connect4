@@ -1,7 +1,11 @@
 import sys, time, math
-from Board import Board
-from BoardBitwise import BoardBitwise
+
+from boards.Board import Board
+from boards.BoardBitwise import BoardBitwise
+from boards.BoardBitwiseLines import BoardBitwiseLines
+
 from bots.Minimax import Minimax
+from bots.MinimaxHorizon import MinimaxHorizon
 
 start_time = time.time()
 
@@ -19,12 +23,14 @@ depth = int(sys.argv[4])
 
 
 #board = Board(state)
-board = BoardBitwise(state)
+#board = BoardBitwise(state)
+board = BoardBitwiseLines(state)
 print(board)
 #print(board.grid)
 
 
-minimax = Minimax()
+#minimax = Minimax()
+minimax = MinimaxHorizon()
 
 print(type(board), type(minimax))
 
@@ -44,8 +50,8 @@ print("Nodes eval", minimax.nodes_eval)
 print(f"Time: {1000*(time.time() - start_time):.8f}ms")
 
 
-print(board.get_lines_r.cache_info())
-print(board.get_lines_y.cache_info())
+#print(board.get_lines_r.cache_info())
+#print(board.get_lines_y.cache_info())
 print(board.get_r_win.cache_info())
 print(board.get_y_win.cache_info())
 

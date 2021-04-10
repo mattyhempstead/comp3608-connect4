@@ -1,10 +1,12 @@
 import time
 from Game import Game
 from bots.Minimax import Minimax
+from bots.MinimaxHorizon import MinimaxHorizon
 from bots.MinimaxSkips import MinimaxSkips
 
-from Board import Board
-from BoardBitwise import BoardBitwise
+from boards.Board import Board
+from boards.BoardBitwise import BoardBitwise
+from boards.BoardBitwiseLines import BoardBitwiseLines
 
 start_time = time.time()
 
@@ -12,7 +14,13 @@ game = Game()
 
 
 player1 = (Minimax(), Board)
-player2 = (Minimax(), BoardBitwise)
+#player1 = (Minimax(), BoardBitwise)
+#player1 = (MinimaxHorizon(), BoardBitwise)
+
+#player2 = (Minimax(), BoardBitwise)
+#player2 = (Minimax(), BoardBitwiseLines)
+player2 = (MinimaxHorizon(), BoardBitwise)
+#player2 = (MinimaxHorizon(), BoardBitwiseLines)
 
 
 f = open("results.csv", "w")

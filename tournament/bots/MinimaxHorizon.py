@@ -1,6 +1,6 @@
 import math, time
 
-class Minimax:
+class MinimaxHorizon:
     """
         Take an eval function param.
         How to handle time?
@@ -30,6 +30,21 @@ class Minimax:
 
         v = -math.inf
         a = None
+
+
+        if depth > 1:
+            ret = None
+            for c in [3,2,4,1,5,0,6]:
+                r = board.column_count[c]
+                if r == 6: continue
+                
+                board.place(1, r, c)
+                if board.is_r_win():
+                    ret = (c, board.eval())
+                board.remove(1, r, c)
+                if ret != None:
+                    return ret
+
 
 
         for c in [3,2,4,1,5,0,6]:
@@ -70,6 +85,20 @@ class Minimax:
 
         v = math.inf
         a = None
+
+
+        if depth > 1:
+            ret = None
+            for c in [3,2,4,1,5,0,6]:
+                r = board.column_count[c]
+                if r == 6: continue
+
+                board.place(-1, r, c)
+                if board.is_y_win():
+                    ret = (c, board.eval())
+                board.remove(-1, r, c)
+                if ret != None:
+                    return ret
 
 
         for c in [3,2,4,1,5,0,6]:

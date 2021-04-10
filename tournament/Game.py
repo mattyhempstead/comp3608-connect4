@@ -1,5 +1,5 @@
 import math, time, random
-from Board import Board
+from boards.Board import Board
 
 class Game:
     """

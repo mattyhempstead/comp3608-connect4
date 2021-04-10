@@ -58,6 +58,12 @@ class BoardBitwise:
         self.y_and = None
 
 
+        # Filter out the impossible FOURS for red and yellow
+        #self.FOURS_r = FOURS[self.pieces_y & FOURS == 0]
+        #self.FOURS_y = FOURS[self.pieces_r & FOURS == 0]
+        #print(len(self.FOURS_r), len(self.FOURS_y))
+
+
     def generate_fours():
         fours = []
 
@@ -211,42 +217,15 @@ class BoardBitwise:
             Subtract number for opponent.
         """
 
-        #if self.r_win:
         if self.r_win:
             return +1000000
-        #elif self.y_win:
         elif self.y_win:
             return -1000000
 
-
-        # Check whether each 4-in-a-row exists for red
-        # Bitwise & with yellow. Zero implies yellow has filled none of the
-        # spots.
-
-        #lines_r = sum(self.y_and == 0)
-        #lines_r = sum(self.pieces_y & FOURS == 0)
-        lines_r = self.get_lines_r(self.pieces_y)
-        #print("R Left:", lines_r)
-
-        #lines_y = sum(self.r_and == 0)
-        #lines_y = sum(self.pieces_r & FOURS == 0)
-        lines_y = self.get_lines_y(self.pieces_r)
-        #print("Y Left:", lines_y)
+        return 0
 
 
-        return lines_r - lines_y
-
-
-    #@lru_cache(maxsize=1024)
-    def get_lines_r(self, pieces_r):
-        return sum(self.pieces_y & FOURS == 0)
-
-    #@lru_cache(maxsize=1024)
-    def get_lines_y(self, pieces_y):
-        return sum(self.pieces_r & FOURS == 0)
-
-
-    #@lru_cache(maxsize=1024)
+    @lru_cache(maxsize=4096)
     def get_r_win(self, pieces_r):
         # If quicker, can order by most likely to give 4-in-a-row
         #for line in FOURS:
@@ -258,10 +237,11 @@ class BoardBitwise:
         #self.r_win = any(self.r_and == FOURS)
         #return self.r_win
 
+        #return any(self.pieces_r & self.FOURS_r == self.FOURS_r)
         return any(self.pieces_r & FOURS == FOURS)
 
 
-    #@lru_cache(maxsize=1024)
+    @lru_cache(maxsize=4096)
     def get_y_win(self, pieces_y):
         # If quicker, can order by most likely to give 4-in-a-row
         #for line in FOURS:
@@ -273,6 +253,7 @@ class BoardBitwise:
         #self.y_win = any(self.y_and == FOURS)
         #return self.y_win
 
+        #return any(self.pieces_y & self.FOURS_y == self.FOURS_y)
         return any(self.pieces_y & FOURS == FOURS)
 
 
