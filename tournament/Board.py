@@ -1,4 +1,5 @@
-#import numpy as np
+import numpy as np
+import math
 
 class Board:
     def __init__(self, state):
@@ -6,6 +7,9 @@ class Board:
         
         self.red_count = 0
         self.yellow_count = 0
+
+
+        self.move_count = 0
 
 
         # Number in a row for each colour
@@ -18,7 +22,7 @@ class Board:
 
 
         self.grid = [[[0]*9 for i in range(7)] for j in range(6)]
-        #self.grid = np.array(self.grid)
+        self.grid = np.array(self.grid)
 
         pre_grid = [list(row) for row in state.split(",")]
         for r in range(6):
@@ -34,21 +38,42 @@ class Board:
 
         #print("INIT FINISHED")
 
+        self.r_win = False
+        self.y_win = False
+
 
     def __str__(self):
         s = ""
         for row in reversed(self.grid):
             for col in row:
-                s += f" {col[0]: }"
-                s += "["+"".join(map(str,col[1:]))+"]"
+                s += " " + ['o','.','x'][col[0]+1]
+                #s += f" {col[0]: }"
+                #s += "["+"".join(map(str,col[1:]))+"]"
             s += "\n"
         #s += '='*23
 
         s += f'\nR: {self.red_count} {self.red_in_a_row}'
         s += f'\nY: {self.yellow_count} {self.yellow_in_a_row}'
-        s += f'\n{self.column_count}'
-        s += f'\n{self.eval()}'
+        s += f'\nCols: {self.column_count}'
+        s += f'\nMoves: {self.move_count}'
+        s += f'\nEval: {self.eval()}'
         s += '\n'
+
+        return s
+
+    
+    def get_state_str(self):
+        s = ""
+        for row in self.grid:
+            for col in row:
+                if col[0] == 0:
+                    s += "."
+                elif col[0] == 1:
+                    s += "r"
+                elif col[0] == -1:
+                    s += "y"
+            s += ","
+        s = s[:-1]
 
         return s
 
@@ -56,8 +81,12 @@ class Board:
     def place(self, piece, r, c):
         #print(f"Placing: {piece: } ({r},{c})")
         
+
         cell = self.grid[r][c]
         cell[0] = piece
+
+
+        self.move_count += 1
 
         if piece == 1:
             self.red_count += 1
@@ -251,13 +280,14 @@ class Board:
 
 
 
-    def remove(self, r, c):
+    def remove(self, piece, r, c):
         #print(f"Removing: ({r},{c})")
 
         cell = self.grid[r][c]
         piece = cell[0]
         cell[0] = 0
 
+        self.move_count -= 1
         if piece == 1:
             self.red_count -= 1
         else:
@@ -342,6 +372,9 @@ class Board:
             self.grid[r-i][c+i][7] -= TL
 
 
+    def skip(self):
+        self.move_count += 1
+
 
     def eval(self):
         total = 0
@@ -365,12 +398,17 @@ class Board:
 
         return total
 
+    
+    def is_r_win(self):
+        self.r_win = any(self.red_in_a_row[2:])
+        return self.r_win
 
-    def is_winner(self):
-        if sum(self.red_in_a_row[2:]) > 0:
-            return True
-        if sum(self.yellow_in_a_row[2:]) > 0:
-            return True
-        return False
+    def is_y_win(self):
+        self.y_win = any(self.yellow_in_a_row[2:])
+        return self.y_win
+
+    def has_winner(self):
+        return self.is_r_win() or self.is_y_win()
+
 
 

@@ -83,11 +83,163 @@ Read some stuff about putting matrix in cache?
 Need to be able to read/write from this SUPER quick.
 
 
+Need a fast bitwise_and
+
+
 
 ## Alpha Beta
 I think we always want to first scan the nodes that are best for the current player.
 Probably start from the middle then.
 
+
+
+## Bugs
+If board is almost full bot will error
+
+
+
+ . . . x . . .
+ . . o o o . .
+ . . x o o o .
+ . . x o x x .
+ . x x x o o .
+ . x o x x o .
+
+On this position bot chooses to play 0 rather than 5 at depth 3.
+1 (1, 101) 0.47373772ms
+2 (5, -200) 1.15132332ms
+3 (0, 201) 3.64995003ms
+4 (5, -100) 11.60883904ms
+5 (1, 291) 31.35657310ms
+6 (5, 0) 88.59562874ms
+7 (1, 291) 211.83156967ms
+8 (0, 100) 542.55199432ms
+
+
+
+
+
+
+
+## Simulator
+Need to make it non-determinsitic to get indiction of win rate.
+
+Can try randomly swapping between looping on [3,2,4,1,5,0,6] and [3,4,2,5,1,6,0]
+as this should slightly change rate of search.
+
+Prob not.
+
+Instead limit time randomly between 0.8 and 1.2 seconds?
+
+
+
+## Optimal Moves
+Get a big move bank of optimal moves.
+
+Without skips, I could easily get the first 6 or so moves.
+
+With skips however, the optimal move is much less obvious and might require some
+large searches?
+
+
+
+## Bitwise
+
+Store game state as two 42 bit strings.
+Represent opponent and my moves.
+
+Get a list of all possible 4-in-a-rows as bit strings.
+I count 69.
+
+Can check easily with bit-wise operations if board has a given winning state.
+Invert winning state. OR with player board. Check for all ones.
+
+Using opponents bits, I can count how many possible 4-in-a-rows still exist.
+Can find how many still exist for opponent too.
+
+
+Maybe also different 4-in-a-row combinations are worth more than others.
+Can weight them differently in the score.
+This gives the GA something to train for.
+
+
+
+Could also look for other features (e.g. L's).
+Pretty time consuming but possible.
+
+Having two winning placements above eachother is a certain win feature.
+Also a placement which opens up two winning placements is a certain win.
+
+
+
+ . . . x . . .
+ . . o o o . .
+ . . x o o o .
+ . . x o x x .
+ . x x x o o .
+ . x o x x o .
+
+ 3*7 + 4*6 + 3*4 + 3*4 = 69
+
+For opponent and me, this gives 138 checks (weights).
+
+
+
+## Features
+
+Could create features which represent combinations of 4-in-a-rows.
+ . . . . . . .
+ . . x x x x .
+ . . . . . x .
+ . . . . x . .
+ . . . x . . .
+ . . x . . . .
+
+e.g. This one represents a winning situation against a skip bot.
+
+
+
+## Search Order
+
+Currently searching from middle out.
+Could pick sort order based on how many 4-in-a-rows pass through that column?
+This would only be a single scan at the init of the bot.
+
+
+
+## Control Strategy
+Try the quickest possible strategy 4-in-a-rows.
+This involves just placing pieces in order and searching for a 4-in-a-row.
+Checking is pretty slow. Could maybe try the check method that looks at
+surrounding pieces only when a piece is placed.
+
+
+
+At the start filter out the 4-in-a-rows that are impossible for each player?
+All future checks will be shorter.
+
+Maybe the higher depths can move 4-in-a-rows out of the array?
+
+Checking for winner can be simplified.
+I only need to check for those 4-in-a-rows passing through the recently placed
+piece.
+Can do this when I placed the piece itself.
+
+
+## Speed 2
+
+Hard code the final depth check.
+This prevents another function call and might be a bit quicker?
+
+
+
+
+## lru_cache
+Wow so good.
+The IDS will now be so much faster since its all the same program?
+Make sure its the same board!
+
+The same function across different instances might break?
 
 
 
