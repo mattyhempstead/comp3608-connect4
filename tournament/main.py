@@ -7,20 +7,26 @@ from bots.MinimaxSkips import MinimaxSkips
 from boards.Board import Board
 from boards.BoardBitwise import BoardBitwise
 from boards.BoardBitwiseLines import BoardBitwiseLines
+from boards.BoardBitwisePiece import BoardBitwisePiece
 
 start_time = time.time()
 
 game = Game()
 
 
-player1 = (Minimax(), Board)
+#player1 = (Minimax(), Board)
 #player1 = (Minimax(), BoardBitwise)
 #player1 = (MinimaxHorizon(), BoardBitwise)
+#player1 = (MinimaxHorizon(), BoardBitwiseLines)
+#player1 = (Minimax(), BoardBitwiseLines)
+player1 = (Minimax(), BoardBitwisePiece)
 
 #player2 = (Minimax(), BoardBitwise)
 #player2 = (Minimax(), BoardBitwiseLines)
-player2 = (MinimaxHorizon(), BoardBitwise)
+#player2 = (MinimaxHorizon(), BoardBitwise)
 #player2 = (MinimaxHorizon(), BoardBitwiseLines)
+#player2 = (Minimax(), BoardBitwisePiece)
+player2 = (MinimaxHorizon(), BoardBitwisePiece)
 
 
 f = open("results.csv", "w")

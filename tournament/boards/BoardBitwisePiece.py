@@ -14,8 +14,17 @@ FOURS = np.array([2113665, 270549120, 34630287360, 4227330, 541098240,
     34905128960, 4260880, 545392640, 69810257920, 8521760, 1090785280,
     139620515840, 17043520, 2181570560, 279241031680])
 
+PIECE_VALUES = [
+    [3,4,5,7,5,4,3],
+    [4,6,8,10,8,6,4],
+    [5,8,11,13,11,8,5],
+    [5,8,11,13,11,8,5],
+    [4,6,8,10,8,6,4],
+    [3,4,5,7,5,4,3]
+]
 
-class BoardBitwise:
+
+class BoardBitwisePiece:
     def __init__(self, state=",".join(["."*7]*7)):
         self.state = state
         #print(state)
@@ -53,8 +62,8 @@ class BoardBitwise:
         self.r_win = False
         self.y_win = False
 
-        self.r_and = None
-        self.y_and = None
+        self.r_score = 0
+        self.y_score = 0
 
 
         # Filter out the impossible FOURS for red and yellow
@@ -180,10 +189,14 @@ class BoardBitwise:
             self.pieces_r |= 1 << (c + r*7)
             self.red_count += 1
 
+            self.r_score += PIECE_VALUES[r][c]
+
             self.r_win = self.get_r_win(self.pieces_r)
         else:
             self.pieces_y |= 1 << (c + r*7)
             self.yellow_count += 1
+
+            self.y_score += PIECE_VALUES[r][c]
 
             self.y_win = self.get_y_win(self.pieces_y)
 
@@ -198,10 +211,14 @@ class BoardBitwise:
             self.pieces_r &= ~(1 << (c + r*7))
             self.red_count -= 1
 
+            self.r_score -= PIECE_VALUES[r][c]
+
             self.r_win = False
         else:
             self.pieces_y &= ~(1 << (c + r*7))
             self.yellow_count -= 1
+            
+            self.y_score -= PIECE_VALUES[r][c]
 
             self.y_win = False
 
@@ -221,7 +238,7 @@ class BoardBitwise:
         elif self.y_win:
             return -1000000
 
-        return 0
+        return self.r_score - self.y_score
 
 
     @lru_cache(maxsize=4096)
@@ -280,10 +297,9 @@ if __name__ == '__main__':
     #print(board)
 
 
-    print(FOURS)
 
     
-    board = BoardBitwise()
+    board = BoardBitwisePiece()
     board.place(1, 0, 0)
     board.place(1, 0, 1)
     board.place(1, 0, 2)

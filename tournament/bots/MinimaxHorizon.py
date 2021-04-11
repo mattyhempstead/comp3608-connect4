@@ -33,17 +33,37 @@ class MinimaxHorizon:
 
 
         if depth > 1:
-            ret = None
+            # Play on instant wins (with higher priority)
             for c in [3,2,4,1,5,0,6]:
                 r = board.column_count[c]
                 if r == 6: continue
-                
+
                 board.place(1, r, c)
                 if board.is_r_win():
                     ret = (c, board.eval())
-                board.remove(1, r, c)
-                if ret != None:
+                    board.remove(1, r, c)
                     return ret
+                board.remove(1, r, c)
+
+
+            # Play to block instant losses
+            for c in [3,2,4,1,5,0,6]:
+                r = board.column_count[c]
+                if r == 6: continue
+           
+                board.place(-1, r, c)
+                if board.is_y_win():
+                    board.remove(-1, r, c)
+
+                    # Assume all other moves result in loss
+                    board.place(1, r, c)
+                    move = self.move_min(board, depth-1, alpha, beta)
+                    if move == None:
+                        return
+                    ret = (c, move[1])
+                    board.remove(1, r, c)
+                    return ret
+                board.remove(-1, r, c)
 
 
 
@@ -88,7 +108,7 @@ class MinimaxHorizon:
 
 
         if depth > 1:
-            ret = None
+            # Play on instant wins (with higher priority)
             for c in [3,2,4,1,5,0,6]:
                 r = board.column_count[c]
                 if r == 6: continue
@@ -96,9 +116,30 @@ class MinimaxHorizon:
                 board.place(-1, r, c)
                 if board.is_y_win():
                     ret = (c, board.eval())
-                board.remove(-1, r, c)
-                if ret != None:
+                    board.remove(-1, r, c)
                     return ret
+                board.remove(-1, r, c)
+
+
+            # Play to block instant losses
+            for c in [3,2,4,1,5,0,6]:
+                r = board.column_count[c]
+                if r == 6: continue
+           
+                board.place(1, r, c)
+                if board.is_r_win():
+                    board.remove(1, r, c)
+
+                    # Assume all other moves result in loss
+                    board.place(-1, r, c)
+                    move = self.move_max(board, depth-1, alpha, beta)
+                    if move == None:
+                        return
+                    ret = (c, move[1])
+                    board.remove(-1, r, c)
+                    return ret
+                board.remove(1, r, c)
+
 
 
         for c in [3,2,4,1,5,0,6]:

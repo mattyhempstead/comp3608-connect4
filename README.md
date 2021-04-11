@@ -142,6 +142,12 @@ With skips however, the optimal move is much less obvious and might require some
 large searches?
 
 
+Do IDS overnight from a blank board.
+Store the most recently calculated score for each position.
+Probably also increase the lru_cache massively for this test.
+If I get like a million score positions I might need to binary search?
+
+
 
 ## Bitwise
 
@@ -264,5 +270,24 @@ Plot winning % vs search time (with error)?
 
 ## Search Order
 
+
+
+## Check for opponent plays in one move
+
+Check for any instant wins that exist.
+Get current height of all columns.
+Search for any pieces that are the 4th required to win?
+I think this needs 7 checks.
+
+Instant blocks.
+If opponent has any pieces 1 from completion we need to block them.
+
+
+
+
+I can check all pieces at the current level.
+
+
+Can add one to height by shifting across by 7.
 
 

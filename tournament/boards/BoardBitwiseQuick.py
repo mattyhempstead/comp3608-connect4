@@ -14,8 +14,17 @@ FOURS = np.array([2113665, 270549120, 34630287360, 4227330, 541098240,
     34905128960, 4260880, 545392640, 69810257920, 8521760, 1090785280,
     139620515840, 17043520, 2181570560, 279241031680])
 
+FOURS_PIECES = [[None for i in range(7)] for i in range(6)]
+FOURS_PIECES = np.array(FOURS_PIECES)
 
-class BoardBitwise:
+for r in range(6):
+    for c in range(7):
+        piece = 1 << (c + r*7)
+        FOURS_PIECES[r][c] = FOURS[piece & FOURS > 0]
+
+
+
+class BoardBitwiseQuick:
     def __init__(self, state=",".join(["."*7]*7)):
         self.state = state
         #print(state)
@@ -180,15 +189,19 @@ class BoardBitwise:
             self.pieces_r |= 1 << (c + r*7)
             self.red_count += 1
 
+            self.r = r
+            self.c = c
             self.r_win = self.get_r_win(self.pieces_r)
         else:
             self.pieces_y |= 1 << (c + r*7)
             self.yellow_count += 1
 
+            self.r = r
+            self.c = c
             self.y_win = self.get_y_win(self.pieces_y)
 
 
-    
+
     def remove(self, piece, r, c):
         #print(f"Placing: {piece: } ({r},{c})")
         self.move_count -= 1
@@ -237,7 +250,11 @@ class BoardBitwise:
         #return self.r_win
 
         #return any(self.pieces_r & self.FOURS_r == self.FOURS_r)
-        return any(self.pieces_r & FOURS == FOURS)
+
+        FOURS_PIECE = FOURS_PIECES[self.r][self.c]
+        return any(self.pieces_r & FOURS_PIECE == FOURS_PIECE)
+
+        #return any(self.pieces_r & FOURS == FOURS)
 
 
     @lru_cache(maxsize=4096)
@@ -253,7 +270,11 @@ class BoardBitwise:
         #return self.y_win
 
         #return any(self.pieces_y & self.FOURS_y == self.FOURS_y)
-        return any(self.pieces_y & FOURS == FOURS)
+
+        FOURS_PIECE = FOURS_PIECES[self.r][self.c]
+        return any(self.pieces_y & FOURS_PIECE == FOURS_PIECE)
+
+        #return any(self.pieces_y & FOURS == FOURS)
 
 
     def is_r_win(self):
@@ -280,10 +301,8 @@ if __name__ == '__main__':
     #print(board)
 
 
-    print(FOURS)
 
-    
-    board = BoardBitwise()
+    board = BoardBitwiseQuick()
     board.place(1, 0, 0)
     board.place(1, 0, 1)
     board.place(1, 0, 2)
