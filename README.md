@@ -291,3 +291,14 @@ I can check all pieces at the current level.
 Can add one to height by shifting across by 7.
 
 
+
+## Notes
+
+Check that I am running is\_win when depth=0?
+
+Use python function to call global variable and exit() on IDS.
+This was I don't need to bubble up my checks?
+
+
+
+
