@@ -37,7 +37,7 @@ print(move[0])
 #print("Nodes checked", minimax.nodes_checked)
 print(minimax.nodes_checked)
 
-print(f"Time: {1000*(time.time() - start_time):.8f}ms")
+#print(f"Time: {1000*(time.time() - start_time):.8f}ms")
 
 
 

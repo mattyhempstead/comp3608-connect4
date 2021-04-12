@@ -374,3 +374,16 @@ class Board:
         return False
 
 
+    def piece_count(self):
+        return sum(self.column_count)
+
+
+    def is_terminal(self):
+        if self.is_winner():
+            return True
+
+        if self.piece_count() == 42:
+            return True
+
+        return False
+
